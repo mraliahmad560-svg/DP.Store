@@ -1,0 +1,1317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masroor Ahmad | Mystical Interface</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a1a;
+            color: #fff;
+            overflow-x: hidden;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(28, 58, 173, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(156, 39, 176, 0.1) 0%, transparent 20%);
+        }
+
+        /* NEW: Login Modal Styles */
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-container {
+            background: rgba(20, 20, 40, 0.95);
+            padding: 2.5rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(138, 43, 226, 0.5);
+            box-shadow: 0 0 50px rgba(138, 43, 226, 0.3);
+            position: relative;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .login-header h2 {
+            color: #b19cd9;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b19cd9;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #8a2be2;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #b19cd9;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(90deg, #8a2be2, #4a00e0);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(90deg, #4a00e0, #8a2be2);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        .login-footer {
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        .login-footer a {
+            color: #8a2be2;
+            text-decoration: none;
+        }
+
+        .close-login {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: #b19cd9;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* NEW: Profile Section Styles */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            gap: 1.5rem;
+            z-index: 2;
+            position: relative;
+            background: rgba(20, 20, 40, 0.7);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .profile-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 3px solid #8a2be2;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+            transition: all 0.3s;
+        }
+
+        .profile-image:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(138, 43, 226, 0.7);
+        }
+
+        .profile-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .profile-info h2 {
+            color: #b19cd9;
+            margin-bottom: 0.5rem;
+            font-size: 1.8rem;
+        }
+
+        .profile-info p {
+            color: #aaa;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            color: #8a2be2;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        /* NEW: Image Gallery Styles */
+        .gallery-section {
+            margin: 3rem 0;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .gallery-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #b19cd9;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+            height: 200px;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            border-color: #8a2be2;
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 1rem;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .gallery-item:hover .image-overlay {
+            transform: translateY(0);
+        }
+
+        .image-title {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .image-date {
+            color: #b19cd9;
+            font-size: 0.8rem;
+        }
+
+        /* NEW: Lightbox Modal for Images */
+        .lightbox-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 1001;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 10px;
+            border: 2px solid #8a2be2;
+        }
+
+        .lightbox-caption {
+            text-align: center;
+            color: white;
+            margin-top: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .prev-btn, .next-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(138, 43, 226, 0.5);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .prev-btn:hover, .next-btn:hover {
+            background: rgba(138, 43, 226, 0.8);
+        }
+
+        .prev-btn {
+            left: 20px;
+        }
+
+        .next-btn {
+            right: 20px;
+        }
+
+        /* NEW: Upload Button */
+        .upload-btn {
+            padding: 0.8rem 2rem;
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid #8a2be2;
+            color: #fff;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+            margin-top: 1rem;
+        }
+
+        .upload-btn:hover {
+            background: rgba(138, 43, 226, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+
+        /* NEW: Login Button in Header */
+        .login-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 0.6rem 1.2rem;
+            background: rgba(138, 43, 226, 0.3);
+            border: 1px solid #8a2be2;
+            color: #fff;
+            border-radius: 20px;
+            cursor: pointer;
+            z-index: 100;
+            transition: all 0.3s;
+        }
+
+        .login-toggle-btn:hover {
+            background: rgba(138, 43, 226, 0.5);
+            transform: scale(1.05);
+        }
+
+        /* Existing styles remain the same... */
+        .magic-container {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem;
+            z-index: 1;
+        }
+
+        #particles-js {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .main-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .magic-name {
+            font-size: 4.5rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, #8a2be2, #00bfff, #ff00ff);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 1rem;
+            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            letter-spacing: 3px;
+            animation: glow 3s infinite alternate;
+            position: relative;
+        }
+
+        .magic-name::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px;
+            height: 5px;
+            background: linear-gradient(90deg, transparent, #8a2be2, #00bfff, transparent);
+            border-radius: 50%;
+            filter: blur(3px);
+        }
+
+        .tagline {
+            font-size: 1.5rem;
+            color: #b19cd9;
+            font-style: italic;
+            margin-top: 1rem;
+            animation: fadeIn 2s ease-out;
+        }
+
+        .magic-orb {
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #4a00e0, #8e2de2);
+            box-shadow: 
+                0 0 60px #8a2be2,
+                0 0 100px #4a00e0,
+                inset 0 0 20px rgba(255, 255, 255, 0.2);
+            margin: 2rem auto;
+            position: relative;
+            animation: float 6s ease-in-out infinite;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .magic-orb:hover {
+            transform: scale(1.05);
+            box-shadow: 
+                0 0 80px #8a2be2,
+                0 0 120px #4a00e0,
+                inset 0 0 30px rgba(255, 255, 255, 0.3);
+        }
+
+        .orb-inner {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                inset 0 0 20px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+        }
+
+        .magic-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1200px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .card {
+            background: rgba(20, 20, 40, 0.7);
+            border-radius: 15px;
+            padding: 2rem;
+            width: 300px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            transition: all 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(138, 43, 226, 0.3);
+            border-color: rgba(138, 43, 226, 0.6);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #8a2be2, #00bfff);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #8a2be2;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #b19cd9;
+        }
+
+        .card p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .spells-section {
+            margin: 3rem 0;
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .spells-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #b19cd9;
+            text-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+        }
+
+        .spell-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .spell-btn {
+            padding: 0.8rem 1.5rem;
+            background: rgba(138, 43, 226, 0.2);
+            border: 1px solid #8a2be2;
+            color: #fff;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1rem;
+        }
+
+        .spell-btn:hover {
+            background: rgba(138, 43, 226, 0.5);
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(138, 43, 226, 0.5);
+        }
+
+        .magic-footer {
+            margin-top: 3rem;
+            text-align: center;
+            padding: 1.5rem;
+            border-top: 1px solid rgba(138, 43, 226, 0.3);
+            width: 100%;
+            z-index: 2;
+            position: relative;
+            color: #aaa;
+        }
+
+        @keyframes glow {
+            0% {
+                text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
+            }
+            100% {
+                text-shadow: 0 0 30px rgba(0, 191, 255, 0.7), 0 0 40px rgba(138, 43, 226, 0.5);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .magic-name {
+                font-size: 3rem;
+            }
+            
+            .magic-orb {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .orb-inner {
+                width: 75px;
+                height: 75px;
+            }
+            
+            .card {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            .profile-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .profile-stats {
+                justify-content: center;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 480px) {
+            .magic-name {
+                font-size: 2.5rem;
+            }
+            
+            .tagline {
+                font-size: 1.2rem;
+            }
+            
+            .spell-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .spell-btn {
+                width: 80%;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NEW: Login Modal -->
+    <div class="login-modal" id="loginModal">
+        <div class="login-container">
+            <button class="close-login" id="closeLogin">&times;</button>
+            
+            <div class="login-header">
+                <h2><i class="fas fa-lock"></i> Mystical Portal</h2>
+                <p>Enter your credentials to access magical features</p>
+            </div>
+            
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="username"><i class="fas fa-user"></i> Username</label>
+                    <input type="text" id="username" name="username" placeholder="Enter your username" required>
+                </div>
+                
+                <div class="input-group">
+                    <label for="password"><i class="fas fa-key"></i> Password</label>
+                    <div class="password-container">
+                        <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                        <button type="button" class="toggle-password" id="togglePassword">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                
+                <button type="submit" class="login-btn">
+                    <i class="fas fa-magic"></i> Access Portal
+                </button>
+            </form>
+            
+            <div class="login-footer">
+                <p>Don't have an account? <a href="#" id="registerLink">Register here</a></p>
+                <p><a href="#" id="forgotPassword">Forgot your password?</a></p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- NEW: Lightbox Modal for Images -->
+    <div class="lightbox-modal" id="lightboxModal">
+        <button class="close-lightbox" id="closeLightbox">&times;</button>
+        <button class="prev-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+        <button class="next-btn" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+        
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="">
+            <div class="lightbox-caption" id="lightboxCaption"></div>
+        </div>
+    </div>
+
+    <!-- Particles background -->
+    <div id="particles-js"></div>
+    
+    <!-- NEW: Login Button -->
+    <button class="login-toggle-btn" id="loginToggle">
+        <i class="fas fa-user-circle"></i> Login
+    </button>
+    
+    <div class="magic-container">
+        <header class="main-header">
+            <h1 class="magic-name">Masroor Ahmad</h1>
+            <p class="tagline">Where Technology Meets Mystical Art</p>
+        </header>
+        
+        <!-- NEW: Profile Section with Image -->
+        <section class="profile-section">
+            <div class="profile-image">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" 
+                     alt="Masroor Ahmad" id="profileImg">
+            </div>
+            
+            <div class="profile-info">
+                <h2>Digital Mystic & Developer</h2>
+                <p>Passionate about creating magical digital experiences. With expertise in modern web technologies and a touch of mystical creativity, I transform ideas into enchanting realities.</p>
+                
+                <div class="profile-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="projectCount">47</div>
+                        <div class="stat-label">Projects</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="spellCount">89</div>
+                        <div class="stat-label">Spells Cast</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="experience">5+</div>
+                        <div class="stat-label">Years</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="magic-orb" id="magicOrb">
+            <div class="orb-inner">
+                <i class="fas fa-magic"></i>
+            </div>
+        </div>
+        
+        <div class="magic-cards">
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-hat-wizard"></i>
+                </div>
+                <h3>Arcane Wisdom</h3>
+                <p>Harnessing the mystical powers of ancient knowledge combined with modern technology to create enchanting digital experiences.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-code"></i>
+                </div>
+                <h3>Digital Alchemy</h3>
+                <p>Transforming complex code into magical interfaces that captivate and inspire. Every line of code is a spell cast to perfection.</p>
+            </div>
+            
+            <div class="card">
+                <div class="card-icon">
+                    <i class="fas fa-crystal-ball"></i>
+                </div>
+                <h3>Visionary Future</h3>
+                <p>Seeing beyond the horizon with a crystal-clear vision of what's possible when imagination meets innovation.</p>
+            </div>
+        </div>
+        
+        <!-- NEW: Image Gallery Section -->
+        <section class="gallery-section">
+            <h2 class="gallery-title"><i class="fas fa-images"></i> Mystical Creations</h2>
+            <p style="color: #aaa; margin-bottom: 2rem;">A collection of magical projects and digital artifacts</p>
+            
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Images will be dynamically added here -->
+            </div>
+            
+            <button class="upload-btn" id="uploadBtn">
+                <i class="fas fa-cloud-upload-alt"></i> Upload Image
+            </button>
+            <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+        </section>
+        
+        <section class="spells-section">
+            <h2 class="spells-title">Magical Interactions</h2>
+            <div class="spell-buttons">
+                <button class="spell-btn" id="spell1">Summon Stars</button>
+                <button class="spell-btn" id="spell2">Color Shift</button>
+                <button class="spell-btn" id="spell3">Mystical Message</button>
+                <button class="spell-btn" id="spell4">Orb Power</button>
+                <!-- NEW: Gallery Spell -->
+                <button class="spell-btn" id="spell5">View Gallery</button>
+            </div>
+            <p id="spellMessage" style="margin-top: 1.5rem; min-height: 30px; color: #8a2be2;"></p>
+        </section>
+        
+        <footer class="magic-footer">
+            <p>© 2023 Masroor Ahmad | Crafted with <i class="fas fa-heart" style="color:#ff00ff;"></i> and Magic</p>
+            <p>This mystical interface is powered by HTML, CSS, and JavaScript</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // Sample gallery images data
+        const galleryImages = [
+            {
+                src: "https://images.unsplash.com/photo-1518709268805-4e9042af2176?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                title: "Digital Alchemy Lab",
+                date: "2023-10-15"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1517077304055-6e89abbf09b0?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                title: "Mystical Code Portal",
+                date: "2023-09-22"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1550684376-efcbd6e3f031?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                title: "Arcane Interface",
+                date: "2023-08-30"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1519681393784-d120267933ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                title: "Cosmic Web Design",
+                date: "2023-07-18"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1531306728370-e2ebd9d7bbcc?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                title: "Enchanted Database",
+                date: "2023-06-05"
+            },
+            {
+                src: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                title: "Mystical Framework",
+                date: "2023-05-12"
+            }
+        ];
+
+        let currentImageIndex = 0;
+        let isLoggedIn = false;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize particles.js
+            particlesJS("particles-js", {
+                particles: {
+                    number: { value: 80, density: { enable: true, value_area: 800 } },
+                    color: { value: "#8a2be2" },
+                    shape: { type: "circle" },
+                    opacity: { value: 0.5, random: true },
+                    size: { value: 3, random: true },
+                    line_linked: {
+                        enable: true,
+                        distance: 150,
+                        color: "#00bfff",
+                        opacity: 0.2,
+                        width: 1
+                    },
+                    move: {
+                        enable: true,
+                        speed: 2,
+                        direction: "none",
+                        random: true,
+                        straight: false,
+                        out_mode: "out",
+                        bounce: false
+                    }
+                },
+                interactivity: {
+                    detect_on: "canvas",
+                    events: {
+                        onhover: { enable: true, mode: "repulse" },
+                        onclick: { enable: true, mode: "push" }
+                    }
+                },
+                retina_detect: true
+            });
+
+            // Initialize gallery
+            initializeGallery();
+            
+            // Login functionality
+            const loginModal = document.getElementById('loginModal');
+            const loginToggle = document.getElementById('loginToggle');
+            const closeLogin = document.getElementById('closeLogin');
+            const loginForm = document.getElementById('loginForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            
+            // NEW: Login toggle
+            loginToggle.addEventListener('click', function() {
+                loginModal.style.display = 'flex';
+            });
+            
+            closeLogin.addEventListener('click', function() {
+                loginModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            loginModal.addEventListener('click', function(e) {
+                if (e.target === loginModal) {
+                    loginModal.style.display = 'none';
+                }
+            });
+            
+            // Toggle password visibility
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                togglePassword.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+            
+            // Login form submission
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const username = document.getElementById('username').value;
+                const password = document.getElementById('password').value;
+                
+                // Simple validation (in real app, this would connect to a server)
+                if (username && password) {
+                    isLoggedIn = true;
+                    loginToggle.innerHTML = '<i class="fas fa-user-check"></i> ' + username;
+                    loginToggle.style.background = 'rgba(74, 222, 128, 0.3)';
+                    loginToggle.style.borderColor = '#4ade80';
+                    
+                    // Show success message
+                    const spellMessage = document.getElementById('spellMessage');
+                    spellMessage.textContent = `Welcome back, ${username}! Portal access granted.`;
+                    spellMessage.style.color = '#4ade80';
+                    
+                    setTimeout(() => {
+                        spellMessage.textContent = "";
+                    }, 3000);
+                    
+                    loginModal.style.display = 'none';
+                    
+                    // Reset form
+                    loginForm.reset();
+                    
+                    // Enable upload button
+                    document.getElementById('uploadBtn').style.display = 'inline-block';
+                }
+            });
+            
+            // Register link
+            document.getElementById('registerLink').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Registration portal coming soon!');
+            });
+            
+            // Forgot password
+            document.getElementById('forgotPassword').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('A magical password reset link has been sent to your crystal ball!');
+            });
+            
+            // Image upload functionality
+            const uploadBtn = document.getElementById('uploadBtn');
+            const imageUpload = document.getElementById('imageUpload');
+            
+            uploadBtn.addEventListener('click', function() {
+                if (!isLoggedIn) {
+                    alert('Please login to upload images!');
+                    loginModal.style.display = 'flex';
+                    return;
+                }
+                imageUpload.click();
+            });
+            
+            imageUpload.addEventListener('change', function(e) {
+                if (e.target.files.length > 0) {
+                    const file = e.target.files[0];
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        // Add new image to gallery
+                        const newImage = {
+                            src: event.target.result,
+                            title: 'Uploaded: ' + file.name.split('.')[0],
+                            date: new Date().toISOString().split('T')[0]
+                        };
+                        
+                        galleryImages.unshift(newImage);
+                        initializeGallery();
+                        
+                        // Show success message
+                        const spellMessage = document.getElementById('spellMessage');
+                        spellMessage.textContent = 'Image uploaded to gallery!';
+                        spellMessage.style.color = '#8a2be2';
+                        
+                        setTimeout(() => {
+                            spellMessage.textContent = "";
+                        }, 3000);
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Lightbox functionality
+            const lightboxModal = document.getElementById('lightboxModal');
+            const closeLightbox = document.getElementById('closeLightbox');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const lightboxImage = document.getElementById('lightboxImage');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            
+            closeLightbox.addEventListener('click', function() {
+                lightboxModal.style.display = 'none';
+            });
+            
+            prevBtn.addEventListener('click', showPrevImage);
+            nextBtn.addEventListener('click', showNextImage);
+            
+            // Close lightbox with ESC key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && lightboxModal.style.display === 'flex') {
+                    lightboxModal.style.display = 'none';
+                }
+                if (e.key === 'ArrowLeft' && lightboxModal.style.display === 'flex') {
+                    showPrevImage();
+                }
+                if (e.key === 'ArrowRight' && lightboxModal.style.display === 'flex') {
+                    showNextImage();
+                }
+            });
+            
+            // Gallery spell button
+            document.getElementById('spell5').addEventListener('click', function() {
+                document.querySelector('.gallery-section').scrollIntoView({ 
+                    behavior: 'smooth' 
+                });
+                
+                const spellMessage = document.getElementById('spellMessage');
+                spellMessage.textContent = 'Behold the mystical creations!';
+                spellMessage.style.color = '#8a2be2';
+                
+                setTimeout(() => {
+                    spellMessage.textContent = "";
+                }, 3000);
+            });
+
+            // Existing orb and spell functionality (from original code)
+            const magicOrb = document.getElementById('magicOrb');
+            const orbInner = magicOrb.querySelector('.orb-inner i');
+            const spellMessage = document.getElementById('spellMessage');
+            
+            magicOrb.addEventListener('click', function() {
+                const colors = ['#4a00e0', '#8e2de2', '#00bfff', '#ff00ff', '#ff8c00'];
+                const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                
+                magicOrb.style.background = `radial-gradient(circle at 30% 30%, ${randomColor}, ${randomColor}99)`;
+                
+                const icons = ['fa-magic', 'fa-star', 'fa-gem', 'fa-fire', 'fa-bolt'];
+                const currentIcon = orbInner.className.split(' ')[1];
+                let newIcon;
+                do {
+                    newIcon = icons[Math.floor(Math.random() * icons.length)];
+                } while (`fa-${newIcon}` === currentIcon);
+                
+                orbInner.className = `fas fa-${newIcon}`;
+                
+                spellMessage.textContent = "Orb energy shifted! The magic intensifies...";
+                spellMessage.style.color = randomColor;
+                setTimeout(() => {
+                    spellMessage.textContent = "";
+                }, 3000);
+            });
+
+            // Original spell buttons functionality
+            document.getElementById('spell1').addEventListener('click', function() {
+                particlesJS("particles-js", {
+                    particles: {
+                        number: { value: 200, density: { enable: true, value_area: 800 } },
+                        color: { value: "#ffffff" },
+                        shape: { type: "circle" },
+                        opacity: { value: 0.7, random: true },
+                        size: { value: 2, random: true },
+                        line_linked: { enable: false },
+                        move: { enable: true, speed: 1, direction: "none", random: true }
+                    }
+                });
+                
+                spellMessage.textContent = "Stars summoned! The cosmos aligns with your will.";
+                spellMessage.style.color = "#ffffff";
+                setTimeout(() => {
+                    spellMessage.textContent = "";
+                    particlesJS("particles-js", {
+                        particles: {
+                            number: { value: 80, density: { enable: true, value_area: 800 } },
+                            color: { value: "#8a2be2" },
+                            shape: { type: "circle" },
+                            opacity: { value: 0.5, random: true },
+                            size: { value: 3, random: true },
+                            line_linked: {
+                                enable: true,
+                                distance: 150,
+                                color: "#00bfff",
+                                opacity: 0.2,
+                                width: 1
+                            },
+                            move: { enable: true, speed: 2 }
+                        }
+                    });
+                }, 4000);
+            });
+
+            document.getElementById('spell2').addEventListener('click', function() {
+                const colorSchemes = [
+                    { primary: "#8a2be2", secondary: "#00bfff" },
+                    { primary: "#ff00ff", secondary: "#00ffff" },
+                    { primary: "#00ff00", secondary: "#ffff00" },
+                    { primary: "#ff8c00", secondary: "#ff0080" }
+                ];
+                
+                const randomScheme = colorSchemes[Math.floor(Math.random() * colorSchemes.length)];
+                
+                document.documentElement.style.setProperty('--primary-color', randomScheme.primary);
+                document.documentElement.style.setProperty('--secondary-color', randomScheme.secondary);
+                
+                const magicName = document.querySelector('.magic-name');
+                magicName.style.background = `linear-gradient(90deg, ${randomScheme.primary}, ${randomScheme.secondary}, ${randomScheme.primary})`;
+                magicName.style.webkitBackgroundClip = 'text';
+                magicName.style.backgroundClip = 'text';
+                
+                const cards = document.querySelectorAll('.card');
+                cards.forEach(card => {
+                    card.style.borderColor = `${randomScheme.primary}4d`;
+                });
+                
+                spellMessage.textContent = `Color magic activated! The realm now shines with ${randomScheme.primary} and ${randomScheme.secondary}.`;
+                spellMessage.style.color = randomScheme.primary;
+                setTimeout(() => {
+                    spellMessage.textContent = "";
+                }, 3000);
+            });
+
+            document.getElementById('spell3').addEventListener('click', function() {
+                const messages = [
+                    "The magic within you is stronger than you know.",
+                    "Every line of code is a spell waiting to be cast.",
+                    "Technology and magic are two sides of the same coin.",
+                    "Masroor Ahmad: Where logic meets enchantment.",
+                    "The future belongs to those who believe in the magic of their dreams."
+                ];
+                
+                const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+                spellMessage.textContent = randomMessage;
+                spellMessage.style.color = "#00bfff";
+                
+                const floatingText = document.createElement('div');
+                floatingText.textContent = randomMessage;
+                floatingText.style.position = 'fixed';
+                floatingText.style.top = '50%';
+                floatingText.style.left = '50%';
+                floatingText.style.transform = 'translate(-50%, -50%)';
+                floatingText.style.color = '#00bfff';
+                floatingText.style.fontSize = '1.5rem';
+                floatingText.style.opacity = '0';
+                floatingText.style.zIndex = '1000';
+                floatingText.style.pointerEvents = 'none';
+                floatingText.style.transition = 'opacity 1s, transform 1s';
+                
+                document.body.appendChild(floatingText);
+                
+                setTimeout(() => {
+                    floatingText.style.opacity = '1';
+                    floatingText.style.transform = 'translate(-50%, -60%)';
+                }, 10);
+                
+                setTimeout(() => {
+                    floatingText.style.opacity = '0';
+                    floatingText.style.transform = 'translate(-50%, -80%)';
+                    setTimeout(() => {
+                        document.body.removeChild(floatingText);
+                    }, 1000);
+                }, 2000);
+                
+                setTimeout(() => {
+                    spellMessage.textContent = "";
+                }, 4000);
+            });
+
+            document.getElementById('spell4').addEventListener('click', function() {
+                magicOrb.style.animation = 'none';
+                magicOrb.style.boxShadow = '0 0 100px #ff0000, 0 0 150px #ff8c00, inset 0 0 40px rgba(255, 255, 255, 0.5)';
+                
+                setTimeout(() => {
+                    magicOrb.style.animation = 'float 6s ease-in-out infinite';
+                    magicOrb.style.boxShadow = '0 0 60px #8a2be2, 0 0 100px #4a00e0, inset 0 0 20px rgba(255, 255, 255, 0.2)';
+                }, 1000);
+                
+                spellMessage.textContent = "Orb power unleashed! Raw magical energy flows through the interface.";
+                spellMessage.style.color = "#ff0000";
+                setTimeout(() => {
+                    spellMessage.textContent = "";
+                }, 3000);
+            });
+        });
+        
+        function initializeGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+            galleryGrid.innerHTML = '';
+            
+            galleryImages.forEach((image, index) => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.dataset.index = index;
+                
+                galleryItem.innerHTML = `
+                    <img src="${image.src}" alt="${image.title}" loading="lazy">
+                    <div class="image-overlay">
+                        <div class="image-title">${image.title}</div>
+                        <div class="image-date">${image.date}</div>
+                    </div>
+                `;
+                
+                galleryItem.addEventListener('click', () => openLightbox(index));
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+        
+        function openLightbox(index) {
+            currentImageIndex = index;
+            const lightboxModal = document.getElementById('lightboxModal');
+            const lightboxImage = document.getElementById('lightboxImage');
+            const lightboxCaption = document.getElementById('lightboxCaption');
+            
+            const image = galleryImages[currentImageIndex];
+            lightboxImage.src = image.src;
+            lightboxImage.alt = image.title;
+            lightboxCaption.textContent = `${image.title} - ${image.date}`;
+            
+            lightboxModal.style.display = 'flex';
+        }
+        
+        function showPrevImage() {
+            currentImageIndex = (currentImageIndex - 1 + galleryImages.length) % galleryImages.length;
+            const image = galleryImages[currentImageIndex];
+            document.getElementById('lightboxImage').src = image.src;
+            document.getElementById('lightboxCaption').textContent = `${image.title} - ${image.date}`;
+        }
+        
+        function showNextImage() {
+            currentImageIndex = (currentImageIndex + 1) % galleryImages.length;
+            const image = galleryImages[currentImageIndex];
+            document.getElementById('lightboxImage').src = image.src;
+            document.getElementById('lightboxCaption').textContent = `${image.title} - ${image.date}`;
+        }
+    </script>
+</body>
+</html>
